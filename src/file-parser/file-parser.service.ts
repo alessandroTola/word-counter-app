@@ -40,15 +40,18 @@ export class FileParserService {
         return response.data;
       } catch (error) {
         Logger.error(`FileParserService.getFileContent.error: ${error}`);
+        throw new Error('Error fetching file from URL');
       }
     } else {
-      // Read content from file
       try {
+        // Read content from file
         const content = await fs.promises.readFile(path, 'utf8');
         return content;
       } catch (error) {
         Logger.error(`FileParserService.getFileContent.error: ${error}`);
+        throw new Error('Error reading file from local path');
       }
+
     }
   }
 
@@ -60,7 +63,6 @@ export class FileParserService {
   private wordsCount(content: string): number {
     // Implementation to count words
     Logger.log(`FileParserService.wordsCount.begin`);
-    Logger.log(`FileParserService.wordsCount.content: ${content}`);
     const wordsCount = content.split(/\s+/).filter(Boolean).length;
     return wordsCount;
   }
