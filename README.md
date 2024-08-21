@@ -15,7 +15,7 @@ npm start
 
 ## Usage
 
-- To analyze a file, send a GET request to `/file-parser/parse?filePath={file-path}`.
+- To analyze a file, send a GET request to `/file-parser/parse-file?path={file-path}`.
 - `{file-path}` can be a local file path or a URL.
 
 ## Running in Docker

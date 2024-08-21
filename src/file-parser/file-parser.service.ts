@@ -8,6 +8,11 @@ export class FileParserService {
     Logger.log(`FileParserService.parseFile.begin: path=${path}`);
 
     const fileContent = await this.getFileContent(path);
+
+    if (!fileContent) {
+      return { error: 'File content not found' };
+    }
+
     const wordsCount = this.wordsCount(fileContent);
     const lettersCount = this.lettersCount(fileContent);
     const spacesCount = this.spacesCount(fileContent);
