@@ -9,10 +9,6 @@ export class FileParserService {
 
     const fileContent = await this.getFileContent(path);
 
-    if (!fileContent) {
-      return { error: 'File content not found' };
-    }
-
     const wordsCount = this.wordsCount(fileContent);
     const lettersCount = this.lettersCount(fileContent);
     const spacesCount = this.spacesCount(fileContent);
@@ -64,7 +60,8 @@ export class FileParserService {
   private wordsCount(content: string): number {
     // Implementation to count words
     Logger.log(`FileParserService.wordsCount.begin`);
-    const wordsCount = content.split(/\s+/).length;
+    Logger.log(`FileParserService.wordsCount.content: ${content}`);
+    const wordsCount = content.split(/\s+/).filter(Boolean).length;
     return wordsCount;
   }
 
@@ -88,7 +85,7 @@ export class FileParserService {
   private spacesCount(content: string): number {
     // Implementation to count spaces
     Logger.log(`FileParserService.spacesCount.begin`);
-    const spacesCount = content.split(/\s/g).length;
+    const spacesCount = content.split(/\s/g).filter(Boolean).length;
     return spacesCount;
   }
 
