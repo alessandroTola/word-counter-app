@@ -1,4 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
+import axios from 'axios';
+import * as fs from 'fs';
 
 @Injectable()
 export class FileParserService {
@@ -29,7 +31,24 @@ export class FileParserService {
   private async getFileContent(path: string): Promise<string> {
     // Implementation to read file content
     Logger.log(`FileParserService.getFileContent.begin`);
-    return 'file-content';
+
+    if (path.startsWith('http') || path.startsWith('https')) {
+      // Fetch content from URL
+      try {
+        const response = await axios.get(path);
+        return response.data;
+      } catch (error) {
+        Logger.error(`FileParserService.getFileContent.error: ${error}`);
+      }
+    } else {
+      // Read content from file
+      try {
+        const content = await fs.promises.readFile(path, 'utf8');
+        return content;
+      } catch (error) {
+        Logger.error(`FileParserService.getFileContent.error: ${error}`);
+      }
+    }
   }
 
   /**
