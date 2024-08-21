@@ -5,6 +5,18 @@ export class FileParserService {
   async parseFile(path: string) {
     Logger.log(`FileParserService.parseFile.begin: path=${path}`);
 
+    const fileContent = await this.getFileContent(path);
+    const wordsCount = this.wordsCount(fileContent);
+    const lettersCount = this.lettersCount(fileContent);
+    const spacesCount = this.spacesCount(fileContent);
+    const wordsCountGreater = this.wordsCountGreater(fileContent);
+
+    return {
+      wordsCount,
+      lettersCount,
+      spacesCount,
+      wordsCountGreater,
+    };
   }
 
   /**
@@ -22,43 +34,65 @@ export class FileParserService {
 
   /**
    * Function to count words into a file content
-   * @param content 
-   * @returns 
+   * @param content File content
+   * @returns Number of words
    */
   private wordsCount(content: string): number {
     // Implementation to count words
     Logger.log(`FileParserService.wordsCount.begin`);
-    return 0;
+    const wordsCount = content.split(/\s+/).length;
+    return wordsCount;
   }
 
   /**
    * Function to count letters into a file content
-   * @param content 
-   * @returns 
+   * @param content File content
+   * @returns Number of letters
    */
   private lettersCount(content: string): number {
     // Implementation to count letters
     Logger.log(`FileParserService.lettersCount.begin`);
-    return 0;
+    const lettersCount = content.replace(/[^a-zA-Z]/g, '').length;
+    return lettersCount;
   }
 
   /**
    * Function to count spaces into a file content
-   * @param content 
-   * @returns 
+   * @param content File content
+   * @returns Number of spaces
    */
   private spacesCount(content: string): number {
     // Implementation to count spaces
     Logger.log(`FileParserService.spacesCount.begin`);
-    return 0;
+    const spacesCount = content.split(/\s/g).length;
+    return spacesCount;
   }
 
 
   /**
    * Method to count wards that count is greater then 10
+   * @param content File content
+   * @returns Object with words and count
    */
   private wordsCountGreater(content: string): { [key: string]: number } {
+    Logger.log(`FileParserService.wordsCountGreater.begin`);
     // Implementation to count words
-    return {};
+    const words = content.toLocaleLowerCase().split(/\s+/);
+
+    // Count words
+    const wordsCount = words.reduce((acc, word) => {
+      acc[word] = acc[word] ? acc[word] + 1 : 1;
+      return acc;
+    }, {});
+
+    // Filter words with count greater than 10
+    const repeatedWords: { [key: string]: number } = {};
+    for (const word in wordsCount) {
+      if (wordsCount[word] > 10) {
+        repeatedWords[word] = wordsCount[word];
+      }
+    }
+
+    return repeatedWords;
   }
 }
