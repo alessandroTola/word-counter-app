@@ -14,6 +14,11 @@ export class FileParserController {
   @Get('parse-file')
   async parseFile(@Query('path') path: string): Promise<any> {
     Logger.log(`FileParserController.parseFile.begin: path=${path}`);
-    return this.fileParserService.parseFile(path);
+    try {
+      return this.fileParserService.parseFile(path);
+    } catch (error) {
+      Logger.error(`FileParserController.parseFile.error: ${error}`);
+      return Promise.reject(error);
+    }
   }
 }
