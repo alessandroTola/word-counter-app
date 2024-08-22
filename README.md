@@ -22,11 +22,11 @@ npm start
 
 1. Build the Docker image:
 ```console
-docker build -t word-counter-app .
+npm run docker:build
 ```
 2. Run the Docker container:
 ```console
-docker run -p 3000:3000 word-counter-app
+npm run docker:run
 ```
 
 ## Running Tests
