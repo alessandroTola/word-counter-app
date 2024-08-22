@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { FileParserService } from './file-parser.service';
 import { promises as fs } from 'fs';
 import axios from 'axios';
+import { FileAnalysisResult } from './entities/file-analysis-result.entity';
 
 jest.mock('fs', () => ({
   promises: {
@@ -44,6 +45,7 @@ Sed tamen est aliquid, quod nobis non liceat, liceat illis. Virtutis, magnitudin
 
     const result = await service.parseFile('https://filesamples.com/samples/document/txt/sample2.txt');
 
+    expect(result).toBeInstanceOf(FileAnalysisResult);
     expect(result.wordsCount).toBe(423);
     expect(result.lettersCount).toBe(2312); // Excluding punctuation
     expect(result.spacesCount).toBe(423);
@@ -56,6 +58,7 @@ Sed tamen est aliquid, quod nobis non liceat, liceat illis. Virtutis, magnitudin
 
     const result = await service.parseFile('test/localfile/test1.txt');
 
+    expect(result).toBeInstanceOf(FileAnalysisResult);
     expect(result.wordsCount).toBe(2);
     expect(result.lettersCount).toBe(10); // Excluding punctuation
     expect(result.spacesCount).toBe(2);
@@ -68,6 +71,7 @@ Sed tamen est aliquid, quod nobis non liceat, liceat illis. Virtutis, magnitudin
 
     const result = await service.parseFile('test/localfile/test_empty_file.txt');
 
+    expect(result).toBeInstanceOf(FileAnalysisResult);
     expect(result.wordsCount).toBe(0);
     expect(result.lettersCount).toBe(0); // Excluding punctuation
     expect(result.spacesCount).toBe(0);
@@ -80,6 +84,7 @@ Sed tamen est aliquid, quod nobis non liceat, liceat illis. Virtutis, magnitudin
 
     const result = await service.parseFile('test/localfile/test_repeted_word.txt');
 
+    expect(result).toBeInstanceOf(FileAnalysisResult);
     expect(result.wordsCountGreater).toEqual({ test: 14 });
   });
 

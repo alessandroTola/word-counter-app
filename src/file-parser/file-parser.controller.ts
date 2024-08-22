@@ -9,6 +9,7 @@ export class FileParserController {
   /**
    * End point to parse a file
    * @param path File path
+   * @returns Analysis of file content
    */
   @Get('parse-file')
   async parseFile(@Query('path') path: string): Promise<any> {

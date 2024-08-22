@@ -1,25 +1,30 @@
 import { Injectable, Logger } from '@nestjs/common';
 import axios from 'axios';
 import * as fs from 'fs';
+import { FileAnalysisResult } from './entities/file-analysis-result.entity';
 
+const MIN_WORDS_COUNT = 10;
 @Injectable()
 export class FileParserService {
+
+  /**
+   * Function to parse a file based on file path
+   * @param path File path
+   * @returns Analysis of file content
+   */
   async parseFile(path: string) {
     Logger.log(`FileParserService.parseFile.begin: path=${path}`);
 
+    // Get file content based on file path
     const fileContent = await this.getFileContent(path);
 
+    // Count words, letters, spaces and words with count greater than 10
     const wordsCount = this.wordsCount(fileContent);
     const lettersCount = this.lettersCount(fileContent);
     const spacesCount = this.spacesCount(fileContent);
     const wordsCountGreater = this.wordsCountGreater(fileContent);
 
-    return {
-      wordsCount,
-      lettersCount,
-      spacesCount,
-      wordsCountGreater,
-    };
+    return new FileAnalysisResult(wordsCount, lettersCount, spacesCount, wordsCountGreater);
   }
 
   /**
@@ -27,7 +32,7 @@ export class FileParserService {
    * if file path contains 'http' or 'https' then it will fetch content from URL
    * otherwise it will read content from file
    * @param path 
-   * @returns 
+   * @returns file content
    */
   private async getFileContent(path: string): Promise<string> {
     // Implementation to read file content
@@ -111,7 +116,7 @@ export class FileParserService {
     // Filter words with count greater than 10
     const repeatedWords: { [key: string]: number } = {};
     for (const word in wordsCount) {
-      if (wordsCount[word] > 10) {
+      if (wordsCount[word] > MIN_WORDS_COUNT) {
         repeatedWords[word] = wordsCount[word];
       }
     }
