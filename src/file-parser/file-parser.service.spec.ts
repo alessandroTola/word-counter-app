@@ -56,7 +56,7 @@ Sed tamen est aliquid, quod nobis non liceat, liceat illis. Virtutis, magnitudin
     const mockContent = 'Hello World';
     (fs.readFile as jest.Mock).mockResolvedValue(mockContent);
 
-    const result = await service.parseFile('test/localfile/test1.txt');
+    const result = await service.parseFile('test/localfile/test_base.txt');
 
     expect(result).toBeInstanceOf(FileAnalysisResult);
     expect(result.wordsCount).toBe(2);
@@ -88,19 +88,19 @@ Sed tamen est aliquid, quod nobis non liceat, liceat illis. Virtutis, magnitudin
     expect(result.wordsCountGreater).toEqual({ test: 14 });
   });
 
-  it('should throw an error when reading a local file fails', async () => {
-    (fs.readFile as jest.Mock).mockRejectedValue(new Error('Error reading file from local path'));
-
-    await expect(service.parseFile('/path/to/local/file.txt'))
-      .rejects
-      .toThrow('Error reading file from local path');
-  });
-
   it('should throw an error when fetching file from URL fails', async () => {
     (axios.get as jest.Mock).mockRejectedValue(new Error('Request failed with status code 404'));
 
     await expect(service.parseFile('http://example.com/file.txt'))
       .rejects
       .toThrow('Error fetching file from URL');
+  });
+
+  it('should throw an error when reading a local file fails', async () => {
+    (fs.readFile as jest.Mock).mockRejectedValue(new Error('Error reading file from local path'));
+
+    await expect(service.parseFile('/path/to/local/file.txt'))
+      .rejects
+      .toThrow('Error reading file from local path');
   });
 });
